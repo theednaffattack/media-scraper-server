@@ -22,6 +22,8 @@ import { createSchema } from "./global-utils/createSchema";
 
 const RedisStore = connectRedis(session);
 
+const port = process.env.PORT || 5555;
+
 const main = async () => {
   await createConnection();
 
@@ -78,10 +80,29 @@ const main = async () => {
 
   const app = Express.default();
 
+  const allowedOrigins = ["http://localhost:8888", "http://localhost:7777"];
+
+  const corsOptions = {
+    credentials: true,
+    origin: function(origin: any, callback: any) {
+      console.log("VIEW ORIGIN");
+      console.log(origin);
+
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        console.log("CORS IS GOOD");
+        callback(null, true);
+      } else {
+        console.error("origin ", origin);
+        console.error("Not allowd by CORS");
+        callback(new Error("Not allowed by CORS"));
+      }
+    }
+  };
+
   app.use(
     cors({
       credentials: true,
-      origin: "http://localhost:3000"
+      origin: "http://localhost:8888"
     })
   );
 
@@ -103,11 +124,11 @@ const main = async () => {
     })
   );
 
-  apolloServer.applyMiddleware({ app, cors: false });
+  apolloServer.applyMiddleware({ app, cors: corsOptions });
 
-  app.listen(4000, () => {
+  app.listen(port, () => {
     console.log(
-      "server started! GraphQL Playground available at:\nhttp://localhost:4000/graphql"
+      `server started! GraphQL Playground available at:\nhttp://localhost:${port}/graphql`
     );
   });
 };

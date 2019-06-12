@@ -1,0 +1,41 @@
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToMany
+} from "typeorm";
+import { Field, ID, ObjectType } from "type-graphql";
+import { Podcast } from "./Podcast";
+
+// import { SubscriptionEpisode } from "./SubscriptionEpisode";
+
+@ObjectType()
+@Entity()
+export class Subscription extends BaseEntity {
+  @Field(() => ID)
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  name: string;
+
+  @Field()
+  @Column()
+  image: string;
+
+  @Field()
+  @Column()
+  title: string;
+
+  @Field()
+  @Column()
+  feedLink: string;
+
+  // @ts-ignore
+  @Field(type => [Podcast], { nullable: true })
+  @ManyToMany(() => Podcast, podcasts => podcasts.subscriptions)
+  podcasts: Podcast[];
+}

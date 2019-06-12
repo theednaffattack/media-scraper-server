@@ -1,11 +1,12 @@
 import puppeteer from "puppeteer";
 
-export interface IPodcastInfo {
-  image: string;
-  title: string;
-  feedLink: string;
-  episodes: any;
-}
+// export interface IPodcastInfo {
+//   image: string;
+//   title: string;
+//   feedLink: string;
+//   episodes: any;
+//   id: string;
+// }
 
 export const run = async ({ indexUrl }: any) => {
   return new Promise(async (resolve, reject) => {
@@ -62,11 +63,16 @@ export const run = async ({ indexUrl }: any) => {
       let episodeInfo = await page.evaluate(() => {
         let thingToReturn = Array.from(
           document.querySelectorAll("tbody.items > tr > td:nth-child(2)")
-        ).map(item => ({
-          url: item.children[0].getAttribute("href"),
-          text: (<HTMLElement>item.children[0]).innerText,
-          date: (<HTMLElement>item.children[1]).innerText
-        }));
+        ).map(item => {
+          const scrapeDate = (<HTMLElement>item.children[1]).innerText;
+          const dateArray = scrapeDate.split("-");
+          const stringDate = `${dateArray[1]}/${dateArray[2]}/${dateArray[0]}`;
+          return {
+            url: item.children[0].getAttribute("href"),
+            text: (<HTMLElement>item.children[0]).innerText,
+            date: stringDate // (<HTMLElement>item.children[1]).innerText
+          };
+        });
         let finalReturn =
           thingToReturn !== null ? thingToReturn : "Show Image not found";
         return finalReturn;

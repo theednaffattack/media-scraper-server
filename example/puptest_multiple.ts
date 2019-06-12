@@ -1,20 +1,21 @@
 // ROOT/example/puptest_multiple.ts
 
-import { profiles } from "./podcast-profile";
+// import { profiles } from "./podcast-profile";
 import { run } from "./run-puppeteer";
-import { IPodcastProfile } from "./types/IPodcastProfile";
+// import { IPodcastProfile } from "./types/IPodcastProfile";
 
-const numberOfPromises: number = profiles.length;
+// const numberOfPromises: number = profiles.length;
+// ScrapePodcastInfoAsync(theProfiles: IPodcastProfile[])
 
-async function ScrapePodcastInfoAsync(theProfiles: IPodcastProfile[]) {
+export async function ScrapeMultiplePodcastInfoAsync(rawUrls: any) {
+  // const {podcastUrls: indexUrls} = rawUrls;
   return Promise.all(
-    theProfiles.map(async (podcast: IPodcastProfile) => {
-      const { indexUrl } = podcast;
-      return await run({ indexUrl });
+    rawUrls.podcastUrls.map(async (podcastUrl: string) => {
+      return await run({ indexUrl: podcastUrl });
     })
   );
 }
 
-ScrapePodcastInfoAsync(profiles)
-  .then((links: any) => console.log({ total_records: numberOfPromises, links }))
-  .catch(console.error);
+// ScrapePodcastInfoAsync(profiles)
+//   .then((links: any) => console.log({ total_records: numberOfPromises, links }))
+//   .catch(console.error);

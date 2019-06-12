@@ -5,7 +5,7 @@
   "port": 5432,
   "username": "eddie",
   "password": "eddie",
-  "database": "media_scraper_testing",
+  "database": "media_scraper",
   "logging": true,
   "synchronize": true,
   "entities": ["src/entity/**/*.*"],
