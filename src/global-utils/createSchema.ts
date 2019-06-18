@@ -15,11 +15,13 @@ import { ProfilePictureResolver } from "../modules/user/ProfilePictureUpload";
 import { CreatePodcastResolver } from "../modules/podcast/SaveShowData";
 import { GetOnePodcastResolver } from "../modules/podcast/GetOnePodcast";
 import { GetAllPodcastsResolver } from "../modules/podcast/GetAllPodcasts";
+import { GetAllPodcastEpisodesResolver } from "../modules/podcast/get-all-podcast-episodes";
 
 export const createSchema = () =>
   buildSchema({
     resolvers: [
       GetAllPodcastsResolver,
+      GetAllPodcastEpisodesResolver,
       GetOnePodcastResolver,
       ChangePasswordResolver,
       ConfirmUserResolver,

@@ -21,22 +21,30 @@ export class Podcast extends BaseEntity {
   @Column({ nullable: true })
   name: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   image: string;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
   title: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   feedLink: string;
 
   // @ts-ignore
   @Field(type => [PodcastEpisode], { nullable: true })
   @OneToMany(() => PodcastEpisode, podcastepisode => podcastepisode.podcast)
   episodes: PodcastEpisode[];
+
+  @Field()
+  @Column("timestamp", {
+    precision: 3,
+    default: () => "CURRENT_TIMESTAMP(3)",
+    onUpdate: "CURRENT_TIMESTAMP(3)"
+  })
+  updateAt: Date;
 
   // // @ts-ignore
   // @Field(type => [Subscription], { nullable: true })

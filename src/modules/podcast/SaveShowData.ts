@@ -82,33 +82,50 @@ function createBaseResolver<T extends ClassType, X extends ClassType>(
                 return existingPodcastEpisode;
               }
               if (!existingPodcastEpisode) {
-                return await PodcastEpisode.create({
+                let newEpisode = await PodcastEpisode.create({
                   id,
                   url,
                   text,
                   podcast: whichNewOrExistingShow,
                   date: new Date(date)
                 }).save();
+                console.log("newEpisode if condition".toUpperCase());
+                console.log(newEpisode);
+                return newEpisode;
               } else {
                 console.log("SOME FAILURE");
-                return await PodcastEpisode.create({
+                let newEpisode = await PodcastEpisode.create({
                   id,
                   url,
                   text,
                   podcast: whichNewOrExistingShow,
                   date: new Date(date)
                 }).save();
+
+                console.log("newEpisode else condition".toUpperCase());
+                console.log(newEpisode);
+                return newEpisode;
               }
             })
           );
 
-          const getRelation = relations![0];
+          console.log("formattedInfo");
+          console.log(formattedInfo);
 
-          existingPodcast[getRelation] = [...formattedInfo];
+          // const getRelation = relations![0];
 
-          return await existingPodcast.save();
+          // let entityItem = new entity();
 
-          //   return { ...showInfo, episodes: [...formattedInfo] };
+          // entityItem[getRelation] = [...formattedInfo];
+
+          // let viewThisPodcast = await entityItem.save();
+
+          // console.log("viewThisPodcast");
+          // console.log(viewThisPodcast);
+
+          // return viewThisPodcast;
+
+          return { ...showInfo, episodes: [...formattedInfo] };
         })
       );
 

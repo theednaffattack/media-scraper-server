@@ -5,3 +5,7 @@ Decoratting with `@Field()` from type-graphql will expose this field to the grap
 # Upsert
 
 https://github.com/typeorm/typeorm/issues/1090
+
+# Find Options
+
+https://github.com/typeorm/typeorm/blob/master/docs/find-options.md

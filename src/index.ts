@@ -7,6 +7,7 @@ import { GraphQLFormattedError, GraphQLError } from "graphql";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import cors from "cors";
+import internalIp from "internal-ip";
 
 import { redis } from "./redis";
 import { redisSessionPrefix } from "./constants";
@@ -80,7 +81,19 @@ const main = async () => {
 
   const app = Express.default();
 
-  const allowedOrigins = ["http://localhost:8888", "http://localhost:7777"];
+  const localIpAddress = internalIp.v4.sync();
+
+  console.log("localIpAddress");
+  console.log(localIpAddress);
+
+  const allowedOrigins = [
+    "http://localhost:8888",
+    "http://localhost:7777",
+    "http://localhost:3001",
+    "http://localhost:3000",
+    `http://${localIpAddress}:3001`,
+    `http://${localIpAddress}:3000`
+  ];
 
   const corsOptions = {
     credentials: true,
@@ -99,12 +112,7 @@ const main = async () => {
     }
   };
 
-  app.use(
-    cors({
-      credentials: true,
-      origin: "http://localhost:8888"
-    })
-  );
+  app.use(cors(corsOptions));
 
   app.use(
     session({

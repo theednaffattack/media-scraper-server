@@ -1,0 +1,3 @@
+# TypeGraphQL
+
+https://typegraphql.ml/

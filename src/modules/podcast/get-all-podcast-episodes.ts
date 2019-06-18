@@ -7,17 +7,16 @@ import {
   // Field
 } from "type-graphql";
 
-//   import { User } from "../../entity/User";
-import { Podcast } from "../../entity/Podcast";
-// import { PodcastEpisode } from "../../entity/PodcastEpisode";
-// import { EntitySchema } from "typeorm";
+// import { Podcast } from "../../entity/Podcast";
+import { GenericKeys } from "../../types/GenericKeys";
+import { PodcastEpisode } from "../../entity/PodcastEpisode";
 
 function getBaseResolver<T extends ClassType>(
   suffix: string,
   objectTypeCls: T,
-  // inputType: X,
   entity: any,
-  relation?: string
+  relation?: string,
+  findInstructions?: GenericKeys
 ) {
   @Resolver({ isAbstract: true })
   abstract class BaseResolver {
@@ -27,20 +26,12 @@ function getBaseResolver<T extends ClassType>(
     async getAll(): Promise<any> {
       let finalReturns = await entity.find({
         relations: [relation],
-        order: {
-          title: "DESC"
-        }
+        findInstructions
       });
 
       console.log(JSON.stringify(finalReturns, null, 2));
       return finalReturns;
     }
-
-    //   @Mutation(() => returnType, { name: `create${suffix}` })
-    //   async create(@Arg("data", () => inputType) data: any) {
-    //     // @todo: add hashing of password
-    //     return entity.create(data).save();
-    //   }
   }
 
   return BaseResolver;
@@ -59,12 +50,17 @@ function getBaseResolver<T extends ClassType>(
 //   User
 // );
 
-const BaseGetPodcastResolver = getBaseResolver(
-  "Podcasts",
-  Podcast,
+const BaseGetAllPodcastEpisodesResolver = getBaseResolver(
+  "PodcastEpisode",
+  PodcastEpisode,
   // PodcastNameInput,
-  Podcast,
-  "episodes"
+  PodcastEpisode,
+  "podcast",
+  {
+    order: {
+      title: "DESC"
+    }
+  }
 );
 
 // @Resolver()
@@ -77,7 +73,7 @@ const BaseGetPodcastResolver = getBaseResolver(
 // }
 
 @Resolver()
-export class GetAllPodcastsResolver extends BaseGetPodcastResolver {
+export class GetAllPodcastEpisodesResolver extends BaseGetAllPodcastEpisodesResolver {
   //   @Mutation(() => User)
   //   async createUser(@Arg("data") data: RegisterInput) {
   //     // @todo: add hashing of password
