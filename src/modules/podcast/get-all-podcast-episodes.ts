@@ -8,7 +8,7 @@ import {
 } from "type-graphql";
 
 // import { Podcast } from "../../entity/Podcast";
-import { GenericKeys } from "../../types/GenericKeys";
+// import { GenericKeys } from "../../types/GenericKeys";
 import { PodcastEpisode } from "../../entity/PodcastEpisode";
 
 function getBaseResolver<T extends ClassType>(
@@ -16,7 +16,8 @@ function getBaseResolver<T extends ClassType>(
   objectTypeCls: T,
   entity: any,
   relation?: string,
-  findInstructions?: GenericKeys
+  // @ts-ignore
+  findInstructions?: any
 ) {
   @Resolver({ isAbstract: true })
   abstract class BaseResolver {
@@ -24,9 +25,20 @@ function getBaseResolver<T extends ClassType>(
     @Query(type => [objectTypeCls], { name: `getAll${suffix}` })
     // @ts-ignore
     async getAll(): Promise<any> {
+      console.log("findInstructions".toUpperCase());
+      console.log(findInstructions);
+      console.log(Object.keys(findInstructions)[0]);
+      let instructionKey = Object.keys(findInstructions)[0];
+      let argumentsObj = findInstructions[instructionKey];
+
+      console.log({ [instructionKey]: argumentsObj });
+
       let finalReturns = await entity.find({
         relations: [relation],
-        findInstructions
+        [instructionKey]: argumentsObj
+        // order: {
+        //   date: "DESC"
+        // }
       });
 
       console.log(JSON.stringify(finalReturns, null, 2));
@@ -51,14 +63,14 @@ function getBaseResolver<T extends ClassType>(
 // );
 
 const BaseGetAllPodcastEpisodesResolver = getBaseResolver(
-  "PodcastEpisode",
+  "PodcastEpisodes",
   PodcastEpisode,
   // PodcastNameInput,
   PodcastEpisode,
   "podcast",
   {
     order: {
-      title: "DESC"
+      date: "DESC"
     }
   }
 );

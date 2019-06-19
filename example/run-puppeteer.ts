@@ -85,7 +85,7 @@ export const run = async ({ indexUrl }: any) => {
         feedLink: getFeedLink,
         episodes: episodeInfo
       });
-      // THIS MY ADDITION
+      // THIS IS MY ADDITION
     } catch (e) {
       return reject(e);
     }
