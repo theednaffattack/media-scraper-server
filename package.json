@@ -22,7 +22,7 @@
     "puppeteer": "^1.17.0",
     "reflect-metadata": "^0.1.13",
     "type-graphql": "^0.17.1",
-    "typeorm": "^0.2.16",
+    "typeorm": "^0.2.25",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
